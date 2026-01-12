@@ -6,8 +6,33 @@ const user = new Hono()
 
 // get all users
 user.get('users', async (c) => {
-  const users = await User.find()
-  return c.json(users)
+  try {
+    const page = parseInt(c.req.query('page') || '1')
+    const limit = parseInt(c.req.query('limit') || '10')
+
+    if (page < 1 || limit <= 0) {
+      return c.json({ error: 'Invalid page or limit' }, 400)
+    }
+
+    const skip = (page - 1) * limit
+    const users = await User.find()
+      .skip(skip)
+      .limit(limit)
+      .sort({ createdAt: -1 })
+    const total = await User.countDocuments()
+
+    return c.json({
+      data: users,
+      pagination: {
+        total,
+        page,
+        limit
+      }
+    })
+  } catch (err) {
+    console.error(err)
+    return c.json({ error: 'Server error' }, 500)
+  }
 })
 
 // get user details
