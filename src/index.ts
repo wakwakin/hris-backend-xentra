@@ -1,12 +1,11 @@
-import { Hono } from "hono"
-import { loggingMiddleware } from "./middleware/logger"
+import { Hono } from 'hono';
+import { loggingMiddleware } from './middleware/logger';
+import { registerRoutes } from './routes';
 
-const app = new Hono()
+const app = new Hono();
 
-app.use("*", loggingMiddleware)
+app.use('*', loggingMiddleware);
 
-app.get("/", (c) => {
-  return c.json({ message: "root" })
-})
+registerRoutes(app);
 
-export default app
+export default app;

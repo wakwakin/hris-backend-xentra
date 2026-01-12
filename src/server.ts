@@ -1,11 +1,21 @@
-import { serve } from "@hono/node-server"
-import app from "./index"
+import 'dotenv/config';
+import { serve } from '@hono/node-server';
+import app from './index';
+import { connectMongo } from './db/mongo';
 
 const port = 3000;
 
-const server = serve({
-    fetch: app.fetch,
-    port
-})
+const start = async () => {
+  await connectMongo();
 
-server.on("listening", () => console.log(`Server running at http://localhost:${port}/`))
+  const server = serve({
+    fetch: app.fetch,
+    port,
+  });
+
+  server.on('listening', () =>
+    console.log(`Server running at http://localhost:${port}/`),
+  );
+};
+
+start();
