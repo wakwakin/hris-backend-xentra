@@ -1,5 +1,8 @@
 import { exec } from 'child_process'
 import { schemas } from './schema'
+import 'dotenv/config'
+const port = Number(process.env.PORT) || 3000
+const host = process.env.HOST || '0.0.0.0'
 
 const args = process.argv.slice(2)
 
@@ -41,7 +44,7 @@ function findSchema(apiPath: string, method: string) {
 
 const bodyData = findSchema(api, method)
 
-let cmd = `curl -s -X ${method.toUpperCase()} "http://localhost:3000/${api}" -H 'Content-Type: application/json'`
+let cmd = `curl -s -X ${method.toUpperCase()} "http://${host}:${port}/${api}" -H 'Content-Type: application/json'`
 
 if (bodyData) {
   const bodyJson = JSON.stringify(bodyData)
