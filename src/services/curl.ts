@@ -41,7 +41,7 @@ function findSchema(apiPath: string, method: string) {
 
 const bodyData = findSchema(api, method)
 
-let cmd = `curl -s -X ${method.toUpperCase()} http://localhost:3000/${api} -H 'Content-Type: application/json'`
+let cmd = `curl -s -X ${method.toUpperCase()} "http://localhost:3000/${api}" -H 'Content-Type: application/json'`
 
 if (bodyData) {
   const bodyJson = JSON.stringify(bodyData)
