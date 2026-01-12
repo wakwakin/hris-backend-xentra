@@ -1,4 +1,4 @@
-import mongoose from "mongoose"
+import mongoose from 'mongoose'
 
 export async function connectMongo() {
   if (mongoose.connection.readyState === 1) {
@@ -6,5 +6,5 @@ export async function connectMongo() {
   }
 
   await mongoose.connect(process.env.MONGO_URI as string)
-  console.log("MongoDB connected")
+  console.log('MongoDB connected')
 }

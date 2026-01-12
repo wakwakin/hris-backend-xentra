@@ -1,6 +1,6 @@
-import pino from 'pino';
+import pino from 'pino'
 
-const env = process.env.NODE_ENV;
+const env = process.env.NODE_ENV
 
 export const logger = pino({
   level: env === 'production' ? 'info' : 'debug',
@@ -15,4 +15,4 @@ export const logger = pino({
             ignore: 'pid,hostname',
           },
         },
-});
+})

@@ -1,4 +1,4 @@
-import { faker } from '@faker-js/faker';
+import { faker } from '@faker-js/faker'
 
 export const schemas: Record<string, any> = {
   user: {
@@ -17,4 +17,4 @@ export const schemas: Record<string, any> = {
   users: {
     GET: null,
   },
-};
+}
