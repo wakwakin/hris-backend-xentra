@@ -13,6 +13,9 @@ export const schemas: Record<string, any> = {
       name: faker.person.fullName(),
       email: faker.internet.email(),
     },
+    PATCH: {
+      status: faker.helpers.arrayElement(['ACTIVE', 'INACTIVE']),
+    },
   },
   users: {
     GET: null,

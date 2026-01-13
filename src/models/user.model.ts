@@ -4,6 +4,7 @@ const SUser = new Schema(
   {
     email: { type: String, required: true, unique: true },
     name: String,
+    status: { type: String, enum: ['ACTIVE', 'INACTIVE'], default: 'ACTIVE'},
   },
   {
     timestamps: true,
