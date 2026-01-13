@@ -21,7 +21,8 @@ if (args.includes('--list')) {
 const [api, method = 'GET'] = args
 
 if (!api) {
-  console.error('Usage: yarn curl <api> <method>')
+  console.error('Usage: yarn sim <api> <method>')
+  console.log('Display available apis: yarn sim --list')
   process.exit(1)
 }
 
