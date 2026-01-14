@@ -1,0 +1,116 @@
+erDiagram
+%% 1. Identity & Access Control
+USER ||--|| EMPLOYEE : "identity"
+USER ||--o{ ROLE : "assigned"
+ROLE ||--o{ PERMISSION : "contains"
+
+%% 2. Corporate & Client Structure
+XENTRA_GROUP ||--|{ SUBSIDIARY : "owns"
+SUBSIDIARY ||--o{ EMPLOYEE : "employs"
+SUBSIDIARY ||--o{ CLIENT : "manages"
+CLIENT ||--|{ GLOBAL_ACCOUNT_TEAM : "represented_by"
+GLOBAL_ACCOUNT_TEAM ||--o{ DEPARTMENT : "contains"
+DEPARTMENT ||--o{ PROJECT : "owns"
+CLIENT ||--o{ PROJECT : "owns"
+
+%% 3. Supervision & Staffing
+EMPLOYEE ||--o{ SUPERVISION_RELATION : "is_subordinate"
+SUPERVISION_RELATION }|--|| EMPLOYEE : "is_supervisor"
+EMPLOYEE ||--o{ PROJECT_ASSIGNMENT : "allocated_to"
+PROJECT ||--o{ PROJECT_ASSIGNMENT : "staffed_by"
+
+%% 4. Generalized Workflow Engine
+EMPLOYEE ||--o{ WORKFLOW_REQUEST : "initiates"
+WORKFLOW_REQUEST ||--o{ WORKFLOW_STEP : "audit_trail"
+WORKFLOW_STEP }|--|| EMPLOYEE : "acted_by"
+WORKFLOW_REQUEST ||--|| LEAVE_REQUEST : "ext"
+WORKFLOW_REQUEST ||--|| CERTIFICATE_REQUEST : "ext"
+WORKFLOW_REQUEST ||--|| EXIT_PROCESS : "ext"
+
+%% 5. Performance & Competency (Generalized)
+EMPLOYEE ||--o{ PERFORMANCE_REVIEW : "evaluated_via"
+PERFORMANCE_REVIEW ||--o{ REVIEW_METRIC : "details"
+EMPLOYEE ||--o{ SKILLSET : "possesses"
+
+%% 6. HR Lifecycle & Assets
+EMPLOYEE ||--o{ CAREER_EVENT : "logs_history"
+CAREER_EVENT ||--o{ COMPENSATION_LINE : "updates_pay"
+EMPLOYEE ||--o{ EMPLOYEE_DOCUMENT : "has_201_files"
+EMPLOYEE ||--o{ ASSET_ASSIGNMENT : "holds"
+EXIT_PROCESS ||--o{ ASSET_ASSIGNMENT : "triggers_return"
+
+EMPLOYEE {
+    int emp_id PK
+    int supervisor_id FK "Recursive: Line Manager"
+    string first_name
+    string last_name
+    string gender "For GAD"
+    date birth_date
+    string employment_status "OJT/Probationary/Regular/Resigned"
+    string current_level "Junior/Mid/Senior/Lead"
+    date date_hired
+    date original_hire_date
+}
+
+SUPERVISION_RELATION {
+    int relation_id PK
+    int subordinate_id FK
+    int supervisor_id FK
+    string type "Admin/Primary-Proj/Side-Proj"
+    boolean is_active
+}
+
+WORKFLOW_REQUEST {
+    int request_id PK
+    int requester_id FK
+    string type "Leave/Exit/COE"
+    string status "Pending/Approved/Rejected"
+    datetime created_at
+}
+
+WORKFLOW_STEP {
+    int step_id PK
+    int request_id FK
+    int actor_id FK "Approver"
+    string step_name "Manager Approval/IT Clearance"
+    int sequence_number
+    string status "Pending/Completed"
+    datetime updated_at
+}
+
+PERFORMANCE_REVIEW {
+    int review_id PK
+    int employee_id FK
+    int reviewer_id FK
+    string type "Probationary/Annual/Project-End"
+    string recommendation "Absorb/Promote/PIP"
+    date review_date
+}
+
+REVIEW_METRIC {
+    int metric_id PK
+    int review_id FK
+    string category "Technical/Soft Skills/Attendance"
+    int score
+    string feedback
+}
+
+PROJECT_ASSIGNMENT {
+    int assignment_id PK
+    int emp_id FK
+    int project_id FK
+    int supervisor_id FK "Operational Lead"
+    string type "Primary/Side"
+    boolean can_approve_leaves
+    date start_date
+    date end_date
+}
+
+CAREER_EVENT {
+    int event_id PK
+    int emp_id FK
+    string type "Promotion/Absorption/Salary-Adj"
+    string previous_val
+    string new_val
+    date effective_date
+}
