@@ -2,7 +2,7 @@ import { User } from '../models/user.model'
 import { getPagination } from '../utils/pagination'
 
 const ALLOWED_STATUSES = ['ACTIVE', 'INACTIVE'] as const
-type UserStatus = typeof ALLOWED_STATUSES[number]
+type UserStatus = (typeof ALLOWED_STATUSES)[number]
 
 export const userService = {
   getUsersPaginated: async (page: number, limit: number) => {
@@ -48,7 +48,7 @@ export const userService = {
     if (!user) return null
 
     if (data.email && data.email !== user.email) {
-        await userService.uniqueEmail(data.email, id)
+      await userService.uniqueEmail(data.email, id)
     }
 
     Object.assign(user, data)
@@ -59,10 +59,10 @@ export const userService = {
     if (!user) return null
 
     if (!ALLOWED_STATUSES.includes(status)) {
-        throw new Error('INVALID_STATUS')
+      throw new Error('INVALID_STATUS')
     }
 
     user.status = status
     return user.save()
-  }
+  },
 }
